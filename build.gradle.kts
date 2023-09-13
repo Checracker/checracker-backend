@@ -4,10 +4,17 @@ group = "org.checracker"
 version = "0.0.1-SNAPSHOT"
 
 plugins {
-    id("org.springframework.boot") version "2.7.16-SNAPSHOT"
+    val kotlinVersion = "1.6.21"
+    val springBootVersion = "2.7.8"
+
+    id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
+
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+//    kotlin("kapt") version kotlinVersion
+//    kotlin("plugin.serialization") version kotlinVersion
 }
 
 allprojects {
@@ -22,7 +29,8 @@ allprojects {
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
-        plugin("org.jetbrains.kotlin.plugin.spring") // allOpen처리를 위함
+        plugin("org.jetbrains.kotlin.plugin.spring")
+        // all-open 플러그인(자동으로 open을 붙여줌) -> @Configuration class may not be final 에러 때문에 상위에 선언
     }
 
     configure<JavaPluginExtension> {
@@ -69,3 +77,11 @@ project(":batch") {
         implementation(project(":core"))
     }
 }
+
+// front 프로젝트 설정
+project(":admin") {
+    dependencies {
+        implementation(project(":core"))
+    }
+}
+// core에 front, batch, admin이 의존
