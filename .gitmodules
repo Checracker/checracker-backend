@@ -1,0 +1,8 @@
+[submodule "checracker-backend-config"]
+	path = checracker-backend-config
+	url = https://github.com/Checracker/checracker-backend-config.git
+	branch = master
+[submodule "backend-config"]
+	path = backend-config
+	url = https://github.com/Checracker/backend-config.git
+	branch = main
