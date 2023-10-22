@@ -48,7 +48,8 @@ jobs:
 
         # [2]
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean :front:buildNeeded --stacktrace --info -x test
+        # run: ./gradlew clean :{ Module-Name }:buildNeeded --stacktrace --info -x test
         shell: bash
 
         # [3]
