@@ -44,6 +44,7 @@ allprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
+        implementation("org.springframework.boot:spring-boot-starter-actuator") // 스프링 헬스체크
     }
 
     tasks.withType<KotlinCompile> {
