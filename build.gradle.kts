@@ -58,6 +58,10 @@ allprojects {
     }
 }
 
+tasks.bootJar {
+    enabled = false
+}
+
 // core 프로젝트 설정
 project(":core") {
     dependencies {

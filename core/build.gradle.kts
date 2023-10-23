@@ -21,3 +21,6 @@ allOpen {
     annotation("javax.persistence.MappedSuperclass")
     annotation("javax.persistence.Embeddable")
 }
+
+tasks.jar { enabled = true }
+tasks.bootJar { enabled = false }
