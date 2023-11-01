@@ -12,7 +12,7 @@ class UserController(
 ) {
     @GetMapping("/test")
     fun getUsers(): List<User> {
-        println("LOGGING ::: DB 연동 TEST")
+        println("LOGGING ::: TEST")
         return userService.getUsers()
     }
 
