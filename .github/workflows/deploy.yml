@@ -12,7 +12,7 @@ on:
 
 env:
   S3_BUCKET_NAME: checracker-deploy
-  RESOURCE_PATH: ./front/src/main/resources/application-front.yml
+  RESOURCE_PATH: ./backend-config/application-front.yml
   CODE_DEPLOY_APPLICATION_NAME: checracker-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: checracker-server
 
