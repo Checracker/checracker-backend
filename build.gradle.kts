@@ -71,6 +71,10 @@ tasks.register("copyPrivate", Copy::class) {
     into("./front/src/main/resources")
 }
 
+tasks.processResources {
+    dependsOn("copyPrivate")
+}
+
 // core 프로젝트 설정
 project(":core") {
     dependencies {
