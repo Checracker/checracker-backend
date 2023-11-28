@@ -63,14 +63,6 @@ tasks.bootJar {
     enabled = false
 }
 
-// application-front.yml front 모듈 resources로 이동
-tasks.register("copyPrivate", Copy::class) {
-    from("./backend-config") {
-        include("application-front.yml")
-    }
-    into("./front/src/main/resources")
-}
-
 // core 프로젝트 설정
 project(":core") {
     dependencies {

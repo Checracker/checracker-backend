@@ -38,5 +38,3 @@ out/
 
 ### application.yml ###
 front/src/main/resources/application.yml
-# submodule
-front/src/main/resources/application-front.yml

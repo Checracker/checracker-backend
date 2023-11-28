@@ -34,7 +34,11 @@ fi
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
 #nohup java -jar -Dspring.profiles.active=local $DEPLOY_JAR --server.port=8081 >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+<<<<<<< HEAD
 nohup java -jar $DEPLOY_JAR --server.port=8080 -Dspring.profiles.active=front >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+=======
+nohup java -jar $DEPLOY_JAR --server.port=8080 \ -Dspring.config.location=classpath:/home/ubuntu/github_action/backend-config/application-front.yml \ >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+>>>>>>> parent of a4017b0 (서브모듈 yml front 모듈 resource 하위로 복사, 스크립트에 profile로 yml 파일 지정)
 
 sleep 3
 
