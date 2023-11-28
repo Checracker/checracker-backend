@@ -6,4 +6,7 @@ dependencies {
 }
 
 tasks.jar { enabled = false }
-tasks.bootJar { enabled = true }
+tasks.bootJar {
+    enabled = true
+    dependsOn(":copyPrivate")
+}
