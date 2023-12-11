@@ -1,6 +1,6 @@
-package org.checracker.backend.core.user.repository
+package org.checracker.backend.core.repository.user
 
-import org.checracker.backend.core.user.entity.User
+import org.checracker.backend.core.entity.user.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserRepository : JpaRepository<User, Long> {

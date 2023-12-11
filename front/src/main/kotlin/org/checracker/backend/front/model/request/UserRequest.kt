@@ -1,6 +1,6 @@
 package org.checracker.backend.front.model.request
 
-import org.checracker.backend.core.user.entity.User
+import org.checracker.backend.core.entity.user.User
 
 data class UserRequest(
     val id: Long? = null,

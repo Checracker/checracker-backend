@@ -1,4 +1,4 @@
-package org.checracker.backend.core.user.entity
+package org.checracker.backend.core.entity.user
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
