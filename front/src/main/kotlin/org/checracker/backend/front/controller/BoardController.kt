@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 
 @Tag(name = "보드 API", description = "보드 관련 API")
 @RestController
-@RequestMapping("/")
+@RequestMapping("/board")
 class BoardController(
     private val boardService: BoardService,
 ) {
