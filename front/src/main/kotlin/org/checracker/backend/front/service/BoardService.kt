@@ -19,7 +19,7 @@ class BoardService(
     }
 
     fun saveBoard(userId: Long, boardId: Long? = null, request: BoardRequest): Long {
-        // TODO : 보드 네임 중복 검사?
+        // TODO : 보드 네임 중복 검사? + 유저당 보드 생성 개수 제한 약 20개?
         val board = boardRepository.save(request.toBoardEntity(id = boardId ?: 0, userId = userId))
         return board.id!!
     }
