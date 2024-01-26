@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 
 @Tag(name = "보드 API", description = "보드 관련 API")
 @RestController
-@RequestMapping("/board")
+@RequestMapping("v1/board")
 class BoardController(
     private val boardService: BoardService,
 ) {
@@ -30,6 +30,7 @@ class BoardController(
     ): List<BoardListResponse> =
         boardService.getBoardList(userId = userId, pageRequest = PageRequest.of(page ?: 0, size ?: 10))
 
+    @Operation(summary = "보드 생성", description = "보드를 생성합니다.")
     @PostMapping("", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun createBoard(
         @RequestBody boardRequest: BoardRequest,
@@ -37,6 +38,7 @@ class BoardController(
         boardService.saveBoard(request = boardRequest)
     }
 
+    @Operation(summary = "보드 수정", description = "보드를 수정합니다.")
     @PutMapping("/{id}")
     fun modifyBoard(
         @Parameter(name = "id", description = "보드 ID", `in` = ParameterIn.PATH)
@@ -47,6 +49,7 @@ class BoardController(
         boardService.saveBoard(boardId = id, request = boardRequest)
     }
 
+    @Operation(summary = "보드 삭제", description = "보드를 삭제합니다.")
     @DeleteMapping("/{id}")
     fun deleteBoard(
         @Parameter(name = "id", description = "보드 ID", `in` = ParameterIn.PATH)

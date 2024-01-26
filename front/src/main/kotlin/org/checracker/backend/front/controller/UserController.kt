@@ -1,7 +1,6 @@
 package org.checracker.backend.front.controller
 
 import org.checracker.backend.core.entity.user.User
-import org.checracker.backend.front.model.request.UserRequest
 import org.checracker.backend.front.service.UserService
 import org.springframework.web.bind.annotation.*
 
@@ -15,9 +14,4 @@ class UserController(
         println("LOGGING ::: TEST")
         return userService.getUsers()
     }
-
-    @PostMapping("/test")
-    fun saveUser(
-        @RequestBody request: UserRequest,
-    ) = userService.saveUser(request)
 }
