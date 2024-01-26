@@ -13,10 +13,10 @@ data class Board(
     @Id
     @GeneratedValue
     val id: Long? = null,
-    val userId: Int,
+    val userId: Long,
     val title: String,
     val description: String? = null,
-    val image: String? = null,
+    val thumbnail: String? = null,
     val imageOpacity: Int? = null
 ) : BaseEntity() {
     var isDeleted: Boolean = false

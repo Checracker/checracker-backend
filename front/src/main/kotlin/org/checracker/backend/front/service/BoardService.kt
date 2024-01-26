@@ -14,15 +14,17 @@ import java.time.LocalDateTime
 class BoardService(
     private val boardRepository: BoardRepository,
 ) {
-    fun getBoardList(userId: Int, pageRequest: PageRequest): List<BoardListResponse> {
+    fun getBoardList(userId: Long, pageRequest: PageRequest): List<BoardListResponse> {
         return boardRepository.findByUserIdAndIsDeleted(userId = userId, isDeleted = false).toBoardListResponse()
     }
 
-    fun saveBoard(boardId: Long? = null, request: BoardRequest) {
-        boardRepository.save(request.toBoardEntity(id = boardId ?: 0))
+    fun saveBoard(userId: Long, boardId: Long? = null, request: BoardRequest): Long {
+        // TODO : 보드 네임 중복 검사?
+        val board = boardRepository.save(request.toBoardEntity(id = boardId ?: 0, userId = userId))
+        return board.id!!
     }
 
-    fun deleteBoard(userId: Int, boardId: Long): Boolean {
+    fun deleteBoard(userId: Long, boardId: Long): Boolean {
         return boardRepository.findByIdAndUserIdAndIsDeleted(id = boardId, userId = userId, isDeleted = false)
             ?.let { board ->
                 boardRepository.save(

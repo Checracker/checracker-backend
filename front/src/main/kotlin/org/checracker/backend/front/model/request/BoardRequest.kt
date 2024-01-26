@@ -1,20 +1,22 @@
 package org.checracker.backend.front.model.request
 
+import io.swagger.v3.oas.annotations.media.Schema
 import org.checracker.backend.core.entity.board.Board
-import org.springframework.http.codec.multipart.FilePart
 
 data class BoardRequest(
-    val id: Long? = 0,
-    val userId: Int, // TODO : 수정 필요
+    @Schema(description = "보드 타이틀")
     val title: String,
+    @Schema(description = "보드 상세 설명")
     val description: String? = null,
-    val image: FilePart? = null,
+    // TODO : 보드 썸네일 - s3 와 함께 추가
+//    @Schema(description = "보드 썸네일")
+//    val thumbnail: FilePart? = null,
 )
 
-fun BoardRequest.toBoardEntity(id: Long) = Board(
+fun BoardRequest.toBoardEntity(id: Long, userId: Long) = Board(
     id = id,
     userId = userId,
     title = title,
     description = description,
-    image = "", // TODO : 수정 필요
+    thumbnail = "", // TODO : 수정 필요
 )

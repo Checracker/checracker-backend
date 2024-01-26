@@ -6,7 +6,7 @@ data class BoardListResponse(
     val id: Long,
     val title: String,
     val description: String,
-    val image: String?,
+    val thumbnail: String?,
 )
 
 fun List<Board>.toBoardListResponse() =
@@ -15,6 +15,6 @@ fun List<Board>.toBoardListResponse() =
             id = it.id ?: 0,
             title = it.title,
             description = it.description ?: "",
-            image = it.image,
+            thumbnail = it.thumbnail,
         )
     }
