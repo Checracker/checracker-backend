@@ -7,10 +7,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @EnableWebSecurity
-class SecurityConfig() {
+class SecurityConfig(
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter
+) {
 
     private val allowedUrls =
         arrayOf(
@@ -36,6 +39,10 @@ class SecurityConfig() {
                     .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } // 세션을 사용하지 않으므로 STATELESS 설정
+            .addFilterBefore(
+                jwtAuthenticationFilter,
+                BasicAuthenticationFilter::class.java,
+            ) // security 로직에 Jwt 인증 Filter 등록
             .build()!!
     }
 

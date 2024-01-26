@@ -1,13 +1,20 @@
 package org.checracker.backend.front.config.auth
 
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.checracker.backend.core.common.Logger
+import org.checracker.backend.core.repository.user.UserRepository
 import org.checracker.backend.front.model.dto.JwtDto
 import org.checracker.backend.front.model.dto.TokenDto
+import org.checracker.backend.front.model.toLoginUser
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpHeaders
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import java.time.Instant
@@ -20,7 +27,9 @@ import javax.servlet.http.HttpServletRequest
 
 @Component
 @ConfigurationProperties(prefix = "jwt")
-class JwtTokenProvider() {
+class JwtTokenProvider(
+    private val userRepository: UserRepository,
+) {
     lateinit var tokenSecretKey: String
     lateinit var accessTokenValidTime: String
     lateinit var refreshTokenValidTime: String
@@ -88,11 +97,29 @@ class JwtTokenProvider() {
 
     fun validateAccessToken(token: String): Boolean {
         return runCatching {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+            Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
             true
         }.onFailure {
             logger.warn("accessToken 만료 또는 잘못된 형식입니다.")
         }.getOrElse { false }
+    }
+
+    fun getAuthentication(token: String): Authentication {
+        val claims: Claims = Jwts
+            .parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .body
+
+        val userId = claims.id.toLong()
+        val userDetails = userRepository.findByIdOrNull(userId)?.toLoginUser()
+            ?: throw UsernameNotFoundException(userId.toString())
+
+        return UsernamePasswordAuthenticationToken(userDetails, token, listOf())
     }
 
     private fun toLocalDateTime(instant: Instant) = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())

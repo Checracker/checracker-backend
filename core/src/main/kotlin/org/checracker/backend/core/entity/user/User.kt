@@ -1,6 +1,9 @@
 package org.checracker.backend.core.entity.user
 
 import org.checracker.backend.core.common.BaseEntity
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -20,12 +23,37 @@ class User(
     val name: String,
     val nickname: String? = null,
     val profileImage: String,
-) : BaseEntity() {
+) : BaseEntity(), UserDetails {
     var passwordUpdatedAt: LocalDateTime? = null
     var isDeleted: Boolean = false
     var deletedAt: LocalDateTime? = null
+    override fun getAuthorities(): Collection<GrantedAuthority> {
+        return listOf<GrantedAuthority>(SimpleGrantedAuthority("USER_ROLE"))
+    }
 
-    fun getPassword() = password
+    override fun getPassword(): String {
+        return password
+    }
+
+    override fun getUsername(): String {
+        return name
+    }
+
+    override fun isAccountNonExpired(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun isAccountNonLocked(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun isCredentialsNonExpired(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun isEnabled(): Boolean {
+        return isDeleted
+    }
 
     fun checkDeletedUser() {
         if (isDeleted && deletedAt != null) {

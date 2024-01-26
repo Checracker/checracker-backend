@@ -25,7 +25,7 @@ class AuthService(
             email = request.email,
             provider = Provider.CHECRACKER.name,
         )?.let {
-            IllegalArgumentException("이미 사용중인 아이디입니다.")
+            throw IllegalArgumentException("이미 사용중인 아이디입니다.")
         }
 
         val user = userRepository.save(request.toUserEntity(encoder))
@@ -41,7 +41,7 @@ class AuthService(
             provider = Provider.CHECRACKER.name,
         ) ?: throw AuthException("존재하지 않는 회원입니다. 회원 가입을 진행해주세요.")
 
-        val token = if (encoder.matches(request.password, user.getPassword())) {
+        val token = if (encoder.matches(request.password, user.password)) {
             user.checkDeletedUser() // 탈퇴 회원인지 체크
             jwtTokenProvider.createJwt(id = user.id!!, email = user.email, name = user.name)
         } else {
