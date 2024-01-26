@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
@@ -17,7 +18,11 @@ class SecurityConfig() {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
+            "/v1/auth/**",
         )
+
+    @Bean
+    fun passwordEncoder() = BCryptPasswordEncoder()
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {

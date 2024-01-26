@@ -6,8 +6,9 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Table
+import javax.security.auth.message.AuthException
 
-@Table(name = "users") // user 예약어라서 user 쓰면 에러남; users로 대체
+@Table(name = "`user`") // user 예약어라서 `user`
 @Entity
 class User(
     @Id
@@ -15,7 +16,7 @@ class User(
     val id: Long? = null,
     val provider: String,
     val email: String,
-    val password: String,
+    private val password: String,
     val name: String,
     val nickname: String? = null,
     val profileImage: String,
@@ -24,9 +25,11 @@ class User(
     var isDeleted: Boolean = false
     var deletedAt: LocalDateTime? = null
 
-    fun checkPassword(password: String) {
-        if (this.password != password) {
-            throw IllegalArgumentException("잘못된 패스워드입니다.")
+    fun getPassword() = password
+
+    fun checkDeletedUser() {
+        if (isDeleted && deletedAt != null) {
+            throw AuthException("탈퇴 처리가 된 유저입니다.")
         }
     }
 }

@@ -46,6 +46,10 @@ allprojects {
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         implementation("org.springframework.boot:spring-boot-starter-actuator") // 스프링 헬스체크
         implementation("org.springdoc:springdoc-openapi-ui:1.6.15")
+
+        // spring security
+        implementation("org.springframework.boot:spring-boot-starter-security")
+        implementation("org.springframework.security:spring-security-test")
     }
 
     tasks.withType<KotlinCompile> {
