@@ -18,5 +18,5 @@ fun BoardRequest.toBoardEntity(id: Long, userId: Long) = Board(
     userId = userId,
     title = title,
     description = description,
-    thumbnail = "", // TODO : 수정 필요
+    thumbnail = null, // TODO : 수정 필요
 )

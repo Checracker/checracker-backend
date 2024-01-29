@@ -17,7 +17,7 @@ data class Board(
     val title: String,
     val description: String? = null,
     val thumbnail: String? = null,
-    val imageOpacity: Int? = null
+    val imageOpacity: Int? = 0
 ) : BaseEntity() {
     var isDeleted: Boolean = false
     var deletedAt: LocalDateTime? = null
