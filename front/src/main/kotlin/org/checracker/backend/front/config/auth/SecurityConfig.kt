@@ -59,7 +59,7 @@ class SecurityConfig(
                 it.mvcMatchers(*SwaggerPatterns).authenticated().and().httpBasic() // TODO : 스웨거 보안 설정 보완하기 - 쿠키 및 ROLE 설정
                 it.requestMatchers(*convertToRequestMatchers(allowedUrls))
                     .permitAll() // requestMatchers의 인자로 전달된 url은 모두에게 허용
-                    .requestMatchers(PathRequest.toH2Console()).permitAll() // H2 콘솔 접속은 모두에게 허용
+//                    .requestMatchers(PathRequest.toH2Console()).permitAll() // H2 콘솔 접속은 모두에게 허용
                     .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } // 세션을 사용하지 않으므로 STATELESS 설정
