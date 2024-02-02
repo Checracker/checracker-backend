@@ -1,8 +1,10 @@
 package org.checracker.backend.front.service
 
 import org.checracker.backend.core.enum.Provider
+import org.checracker.backend.core.repository.user.UserRefreshTokenRepository
 import org.checracker.backend.core.repository.user.UserRepository
 import org.checracker.backend.front.config.auth.JwtTokenProvider
+import org.checracker.backend.front.model.dto.JwtDto
 import org.checracker.backend.front.model.request.LocalAuthRequest
 import org.checracker.backend.front.model.request.toUserEntity
 import org.checracker.backend.front.model.response.UserResponse
@@ -16,6 +18,7 @@ import javax.security.auth.message.AuthException
 @Service
 class AuthService(
     private val userRepository: UserRepository,
+    private val userRefreshTokenRepository: UserRefreshTokenRepository,
     private val jwtTokenProvider: JwtTokenProvider,
     private val encoder: PasswordEncoder,
 ) {
@@ -49,5 +52,25 @@ class AuthService(
         }
 
         return user.toUserResponse(token)
+    }
+
+    @Transactional
+    fun refresh(refreshToken: String): JwtDto {
+        jwtTokenProvider.validateRefreshToken(refreshToken)
+
+        // refreshToken이 저장되어있는지 확인
+        val userRefreshToken = userRefreshTokenRepository.findByRefreshToken(refreshToken) ?: throw AuthException(
+            "존재하지 않는 refreshToken입니다.",
+        )
+
+        // 유저 찾기 + 탈퇴한 회원인지
+        val user = userRepository.findUserById(id = userRefreshToken.userId) ?: throw AuthException("존재하지 않는 유저라서 token 갱신에 실패했습니다.")
+        user.checkDeletedUser()
+
+        // token 새로 발급받기
+        val token = jwtTokenProvider.createJwt(id = userRefreshToken.userId, email = user.email, name = user.name) // toekn 새로 만들기
+        userRefreshToken.updateRefreshToken(token.refreshToken.token) // 새로 발급받은 refreshToken을 저장
+
+        return token
     }
 }

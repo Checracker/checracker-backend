@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.checracker.backend.core.common.Logger
+import org.checracker.backend.core.entity.user.UserRefreshToken
+import org.checracker.backend.core.repository.user.UserRefreshTokenRepository
 import org.checracker.backend.core.repository.user.UserRepository
 import org.checracker.backend.front.model.dto.JwtDto
 import org.checracker.backend.front.model.dto.TokenDto
@@ -23,12 +25,14 @@ import java.time.ZoneId
 import java.util.*
 import javax.annotation.PostConstruct
 import javax.crypto.SecretKey
+import javax.security.auth.message.AuthException
 import javax.servlet.http.HttpServletRequest
 
 @Component
 @ConfigurationProperties(prefix = "jwt")
 class JwtTokenProvider(
     private val userRepository: UserRepository,
+    private val userRefreshTokenRepository: UserRefreshTokenRepository,
 ) {
     lateinit var tokenSecretKey: String
     lateinit var accessTokenValidTime: String
@@ -66,6 +70,16 @@ class JwtTokenProvider(
 
         val accessToken = createToken(id, name, accessTokenExpireTime)
         val refreshToken = createToken(id, name, refreshTokenExpireTime)
+
+        // refreshToken 있으면 업데이트하고, 없으면 save
+        userRefreshTokenRepository.findByUserId(id)?.updateRefreshToken(refreshToken) ?: run {
+            userRefreshTokenRepository.save(
+                UserRefreshToken(
+                    userId = id,
+                    refreshToken = refreshToken,
+                ),
+            )
+        }
 
         return JwtDto(
             accessToken = TokenDto(
@@ -105,6 +119,14 @@ class JwtTokenProvider(
         }.onFailure {
             logger.warn("accessToken 만료 또는 잘못된 형식입니다.")
         }.getOrElse { false }
+    }
+
+    fun validateRefreshToken(token: String) {
+        runCatching {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
+        }.onFailure {
+            throw AuthException("refreshToken 만료 또는 잘못된 형식으로 로그인이 필요합니다.")
+        }
     }
 
     fun getAuthentication(token: String): Authentication {

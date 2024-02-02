@@ -2,7 +2,9 @@ package org.checracker.backend.front.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.checracker.backend.front.model.dto.JwtDto
 import org.checracker.backend.front.model.request.LocalAuthRequest
+import org.checracker.backend.front.model.request.UserRefreshTokenRequest
 import org.checracker.backend.front.model.response.UserResponse
 import org.checracker.backend.front.service.AuthService
 import org.springframework.web.bind.annotation.PostMapping
@@ -31,5 +33,12 @@ class AuthController(
         @RequestBody request: LocalAuthRequest,
     ): UserResponse {
         return authService.signInLocal(request = request)
+    }
+
+    @Operation(summary = "accessToken 재발급", description = "refreshToken 토큰으로 accessToken, refreshToken 재발급")
+    @PostMapping("/refresh")
+    fun refresh(@RequestBody request: UserRefreshTokenRequest): JwtDto {
+        return authService.refresh(request.refreshToken)
+//            .let { JwtResponse.of(it) })
     }
 }
