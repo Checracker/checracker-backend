@@ -10,6 +10,9 @@ dependencies {
 
     // spring security oauth2 client
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    // validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 }
 
 tasks.jar { enabled = false }

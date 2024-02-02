@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @Tag(name = "인증 API", description = "인증 관련 API")
 @RestController
@@ -22,7 +23,7 @@ class AuthController(
     @Operation(summary = "로컬 회원가입", description = "로컬 회원가입을 합니다.")
     @PostMapping("/sign-up/local")
     fun signUpLocal(
-        @RequestBody request: LocalAuthRequest,
+        @Valid @RequestBody request: LocalAuthRequest,
     ): UserResponse {
         return authService.signUpLocal(request = request)
     }
@@ -30,7 +31,7 @@ class AuthController(
     @Operation(summary = "로컬 로그인", description = "로컬 로그인을 합니다.")
     @PostMapping("/sign-in/local")
     fun signInLocal(
-        @RequestBody request: LocalAuthRequest,
+        @Valid @RequestBody request: LocalAuthRequest,
     ): UserResponse {
         return authService.signInLocal(request = request)
     }
@@ -39,6 +40,5 @@ class AuthController(
     @PostMapping("/refresh")
     fun refresh(@RequestBody request: UserRefreshTokenRequest): JwtDto {
         return authService.refresh(request.refreshToken)
-//            .let { JwtResponse.of(it) })
     }
 }
