@@ -6,6 +6,7 @@ import org.checracker.backend.core.repository.user.UserRepository
 import org.checracker.backend.front.config.auth.JwtTokenProvider
 import org.checracker.backend.front.model.dto.JwtDto
 import org.checracker.backend.front.model.request.LocalAuthRequest
+import org.checracker.backend.front.model.request.LocalAuthSignInRequest
 import org.checracker.backend.front.model.request.toUserEntity
 import org.checracker.backend.front.model.response.UserResponse
 import org.checracker.backend.front.model.response.toUserResponse
@@ -38,7 +39,7 @@ class AuthService(
     }
 
     @Transactional
-    fun signInLocal(request: LocalAuthRequest): UserResponse {
+    fun signInLocal(request: LocalAuthSignInRequest): UserResponse {
         val user = userRepository.findByEmailAndProvider(
             email = request.email,
             provider = Provider.CHECRACKER.name,
