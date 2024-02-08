@@ -3,7 +3,8 @@ package org.checracker.backend.front.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.checracker.backend.front.model.dto.JwtDto
-import org.checracker.backend.front.model.request.LocalAuthRequest
+import org.checracker.backend.front.model.request.LocalAuthSignInRequest
+import org.checracker.backend.front.model.request.LocalAuthSignUpRequest
 import org.checracker.backend.front.model.request.UserRefreshTokenRequest
 import org.checracker.backend.front.model.response.UserResponse
 import org.checracker.backend.front.service.AuthService
@@ -23,7 +24,8 @@ class AuthController(
     @Operation(summary = "로컬 회원가입", description = "로컬 회원가입을 합니다.")
     @PostMapping("/sign-up/local")
     fun signUpLocal(
-        @Valid @RequestBody request: LocalAuthRequest,
+        @Valid @RequestBody
+        request: LocalAuthSignUpRequest,
     ): UserResponse {
         return authService.signUpLocal(request = request)
     }
@@ -31,7 +33,8 @@ class AuthController(
     @Operation(summary = "로컬 로그인", description = "로컬 로그인을 합니다.")
     @PostMapping("/sign-in/local")
     fun signInLocal(
-        @Valid @RequestBody request: LocalAuthRequest,
+        @Valid @RequestBody
+        request: LocalAuthSignInRequest,
     ): UserResponse {
         return authService.signInLocal(request = request)
     }

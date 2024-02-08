@@ -8,7 +8,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
-data class LocalAuthRequest(
+data class LocalAuthSignUpRequest(
     @NotBlank
     @field:Email
     val email: String,
@@ -21,7 +21,7 @@ data class LocalAuthRequest(
     val name: String,
 )
 
-fun LocalAuthRequest.toUserEntity(encoder: PasswordEncoder) = User(
+fun LocalAuthSignUpRequest.toUserEntity(encoder: PasswordEncoder) = User(
     provider = Provider.CHECRACKER.name,
     email = email,
     password = encoder.encode(password),
