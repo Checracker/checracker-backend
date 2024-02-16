@@ -54,6 +54,7 @@ class SecurityConfig(
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf().disable()
+            .cors().and()
             .headers { it.frameOptions().sameOrigin() } // H2 콘솔 사용을 위한 설정
             .authorizeHttpRequests {
                 it.mvcMatchers(*SwaggerPatterns).authenticated().and().httpBasic() // TODO : 스웨거 보안 설정 보완하기 - 쿠키 및 ROLE 설정
